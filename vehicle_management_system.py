@@ -45,28 +45,48 @@ class Vehicle:
         )
 
 
-class Car:
+class Car(Vehicle):
     """
     Класс для представления автомобиля.
     Наследует от Vehicle.
     """
-    pass
+    def __init__(self, name, fuel_tank_capacity, fuel_consumption_per_100km):
+        super().__init__(name, fuel_tank_capacity)
+        self._fuel_consumption_per_100km = fuel_consumption_per_100km
+
+    def calculate_fuel_consumption(self, distance):
+        fuel_consumption = (distance / 100) * self._fuel_consumption_per_100km
+        print(f'Расход на {distance} км: {fuel_consumption:.2f} л.')
+        return fuel_consumption
 
 
-class Airplane:
+class Airplane(Vehicle):
     """
     Класс для представления самолёта.
     Наследует от Vehicle.
     """
-    pass
+    def __init__(self, name, fuel_tank_capacity, fuel_consumption_per_hour):
+        super().__init__(name, fuel_tank_capacity)
+        self._fuel_consumption_per_hour = fuel_consumption_per_hour
+
+    def calculate_fuel_consumption(self, flight_time):
+        fuel_consumption = flight_time * self._fuel_consumption_per_hour
+        print(f'Расход за {flight_time} ч: {fuel_consumption} л.')
+        return fuel_consumption
 
 
-class Boat:
+class Boat(Vehicle):
     """
     Класс для представления катера.
     Наследует от Vehicle.
     """
-    pass
+    def __init__(self, name, fuel_tank_capacity, fuel_consumption_per_hour):
+        super().__init__(name, fuel_tank_capacity)
+        self._fuel_consumption_per_hour = fuel_consumption_per_hour
+
+    def calculate_fuel_consumption(self, travel_time):
+        fuel_consumption = travel_time * self._fuel_consumption_per_hour
+        print(f'Расход за {travel_time} ч: {fuel_consumption} л.')
 
 
 # Создание объектов
