@@ -5,7 +5,20 @@ def validate_fuel_consumption(method):
     """
     def wrapper(self, value):
         # вызов метода: method(self, value)
-        pass
+        if value < 0:
+            print('Ошибка: значение не может быть отрицательным.')
+            return None
+        consumption = method(self, value)
+        if consumption is None:
+            return None
+        if consumption > self._current_fuel_level:
+            print(
+                f'Ошибка: недостаточно топлива для поездки. '
+                f'Нужно {consumption} л, в наличии {self._current_fuel_level} л.'
+            )
+            return None
+        self._current_fuel_level -= consumption
+        return consumption
     return wrapper
 
 
@@ -54,6 +67,7 @@ class Car(Vehicle):
         super().__init__(name, fuel_tank_capacity)
         self._fuel_consumption_per_100km = fuel_consumption_per_100km
 
+    @validate_fuel_consumption
     def calculate_fuel_consumption(self, distance):
         fuel_consumption = (distance / 100) * self._fuel_consumption_per_100km
         print(f'Расход на {distance} км: {fuel_consumption:.2f} л.')
@@ -69,6 +83,7 @@ class Airplane(Vehicle):
         super().__init__(name, fuel_tank_capacity)
         self._fuel_consumption_per_hour = fuel_consumption_per_hour
 
+    @validate_fuel_consumption
     def calculate_fuel_consumption(self, flight_time):
         fuel_consumption = flight_time * self._fuel_consumption_per_hour
         print(f'Расход за {flight_time} ч: {fuel_consumption} л.')
@@ -84,9 +99,11 @@ class Boat(Vehicle):
         super().__init__(name, fuel_tank_capacity)
         self._fuel_consumption_per_hour = fuel_consumption_per_hour
 
+    @validate_fuel_consumption
     def calculate_fuel_consumption(self, travel_time):
         fuel_consumption = travel_time * self._fuel_consumption_per_hour
         print(f'Расход за {travel_time} ч: {fuel_consumption} л.')
+        return fuel_consumption
 
 
 # Создание объектов
